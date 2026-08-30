@@ -737,6 +737,36 @@ footer {
    The iframe fills the entire game area.
 */
 
+.iframe-fallback {
+    position:absolute;
+    left:50%;
+    bottom:18px;
+    transform:translateX(-50%);
+    z-index:2;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 14px;
+    border:1px solid rgba(54,231,255,.28);
+    border-radius:12px;
+    background:rgba(5,7,18,.88);
+    backdrop-filter:blur(10px);
+    color:white;
+    font-size:12px;
+    box-shadow:0 8px 30px rgba(0,0,0,.35);
+}
+.iframe-fallback span {
+    color:var(--muted);
+}
+.iframe-fallback a {
+    color:var(--cyan);
+    font-weight:800;
+    text-decoration:none;
+}
+.iframe-fallback a:hover {
+    text-decoration:underline;
+}
+
 .gamearea iframe {
 
     position:absolute;
@@ -1038,7 +1068,7 @@ Select a game to begin.
    GAMES
    ============================================================ */
 
-const games = [["Slope", "⚪", "Arcade", "https://y8.com/embed/slope"], ["Flappy Bird", "🐥", "Arcade", "https://funhtml5games.com?embed=flappy", [800, 520]], ["Ragdoll Archers", "🏹", "Shooter", "https://www.miniplay.com/embed/ragdoll-archers"], ["Retro Bowl", "🏈", "Sports", "https://911games.io/retro-bowl"], ["Pixel Soccer", "⚽", "Sports", "#"], ["Rocket League", "🚀", "Sports", "#"], ["Synth Shooter", "🔫", "Shooter", "#"], ["Gravity Flip", "🔄", "Arcade", "#"], ["Star Racer", "🌌", "Racing", "#"], ["Cyber Chess", "♟️", "Strategy", "#"], ["Laser Dash", "⚡", "Arcade", "#"], ["Dungeon Zero", "⚔️", "Adventure", "#"], ["Sky Defender", "🛸", "Shooter", "#"], ["Street Drifter", "🏁", "Racing", "#"], ["Goal Machine", "🥅", "Sports", "#"], ["Code Breaker", "💻", "Puzzle", "#"], ["Neon Golf", "⛳", "Sports", "#"], ["Quantum Jump", "🌀", "Platformer", "#"], ["Astro Miner", "⛏️", "Adventure", "#"], ["Void Survivor", "👾", "Action", "#"], ["Turbo Bike", "🏍️", "Racing", "#"], ["Maze Protocol", "🧩", "Puzzle", "#"], ["Cyber Kart", "🏎️", "Racing", "#"], ["Battle Bots", "⚙️", "Action", "#"]];
+const games = [["Slope", "⚪", "Arcade", "https://y8.com/embed/slope"], ["Flappy Bird", "🐥", "Arcade", "https://funhtml5games.com?embed=flappy", [800, 520]], ["Ragdoll Archers", "🏹", "Shooter", "https://www.miniplay.com/embed/ragdoll-archers"], ["Retro Bowl", "🏈", "Sports", "https://911games.io/retro-bowl"], ["Soccer Random", "⚽", "Sports", "https://911games.io/soccer-random"], ["Stickman Hook", "🪝", "Arcade", "https://911games.io/stickman-hook"], ["Little Alchemy", "🧪", "Puzzle", "https://911games.io/little-alchemy"], ["Lands of Blight", "⚔️", "Adventure", "https://911games.io/lands-of-blight"], ["Amogus.io", "👽", "Arcade", "https://911games.io/amogusio"], ["Car Parking Multiplayer", "🚗", "Racing", "https://911games.io/car-parking-multiplayer"], ["Moto X3M", "🏍️", "Racing", "https://911games.io/moto-x3m"], ["Duck Life 3", "🦆", "Sports", "https://911games.io/duck-life-3"], ["Hexanaut", "🐍", "Arcade", "https://911games.io/hexanaut"], ["Papa's Scooperia", "🍨", "Simulation", "https://911games.io/papas-scooperia"], ["Papa's Cupcakeria", "🧁", "Simulation", "https://911games.io/papas-cupcakeria"], ["Papa's Burgeria", "🍔", "Simulation", "https://911games.io/papas-burgeria"], ["Soccer Legends 2021", "⚽", "Sports", "https://911games.io/soccer-legends-2021"], ["Basketball Legends 2020", "🏀", "Sports", "https://911games.io/basketball-legends-2020"], ["Retro Bowl 2", "🏈", "Sports", "https://911games.io/retro-bowl-2"], ["Retro Bowl College", "🎓", "Sports", "https://911games.io/retro-bowl-college"], ["Retro Bowl Poki", "🏈", "Sports", "https://911games.io/retro-bowl-poki"], ["Super Auto Pets", "🐾", "Strategy", "https://911games.io/super-auto-pets"], ["Google Feud", "🔎", "Puzzle", "https://911games.io/google-feud"], ["Fortnite", "🚌", "Action", "https://911games.io/fortnite"], ["Crazy Bikes", "🚲", "Racing", "https://911games.io/crazy-bikes"], ["Archery World Tour", "🏹", "Sports", "https://911games.io/archery-world-tour"], ["Bob The Robber 4", "🕵️", "Adventure", "https://911games.io/bob-the-robber-4"], ["Pro Shooter", "🎯", "Shooter", "https://911games.io/pro-shooter"], ["Impossible Tic Tac Toe", "⭕", "Puzzle", "https://911games.io/impossible-tic-tac-toe"], ["Skribblio", "🎨", "Multiplayer", "https://911games.io/skribblio"], ["Pixel Soccer", "⚽", "Sports", "#"], ["Rocket League", "🚀", "Sports", "#"], ["Synth Shooter", "🔫", "Shooter", "#"], ["Gravity Flip", "🔄", "Arcade", "#"], ["Star Racer", "🌌", "Racing", "#"], ["Cyber Chess", "♟️", "Strategy", "#"], ["Laser Dash", "⚡", "Arcade", "#"], ["Dungeon Zero", "⚔️", "Adventure", "#"], ["Sky Defender", "🛸", "Shooter", "#"], ["Street Drifter", "🏁", "Racing", "#"], ["Goal Machine", "🥅", "Sports", "#"], ["Code Breaker", "💻", "Puzzle", "#"], ["Neon Golf", "⛳", "Sports", "#"], ["Quantum Jump", "🌀", "Platformer", "#"], ["Astro Miner", "⛏️", "Adventure", "#"], ["Void Survivor", "👾", "Action", "#"], ["Turbo Bike", "🏍️", "Racing", "#"], ["Maze Protocol", "🧩", "Puzzle", "#"], ["Cyber Kart", "🏎️", "Racing", "#"], ["Battle Bots", "⚙️", "Action", "#"]];
 
 
 let active = "ALL";
