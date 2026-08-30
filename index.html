@@ -1013,57 +1013,7 @@ Select a game to begin.
    GAMES
    ============================================================ */
 
-const games = [
-
-    ["Slope","⚪","Arcade","https://slopeio.org/"],
-
-    ["Flappy Bird","🐥","Arcade","https://flappybird.gg/"],
-
-    ["Ragdoll Archers","🏹","Shooter","https://classroom-6x.io/game/ragdoll-archers/"],
-
-    ["Mech Arena","🤖","Action","#"],
-
-    ["Pixel Soccer","⚽","Sports","#"],
-
-    ["Rocket League","🚀","Sports","#"],
-
-    ["Synth Shooter","🔫","Shooter","#"],
-
-    ["Gravity Flip","🔄","Arcade","#"],
-
-    ["Star Racer","🌌","Racing","#"],
-
-    ["Cyber Chess","♟️","Strategy","#"],
-
-    ["Laser Dash","⚡","Arcade","#"],
-
-    ["Dungeon Zero","⚔️","Adventure","#"],
-
-    ["Sky Defender","🛸","Shooter","#"],
-
-    ["Street Drifter","🏁","Racing","#"],
-
-    ["Goal Machine","🥅","Sports","#"],
-
-    ["Code Breaker","💻","Puzzle","#"],
-
-    ["Neon Golf","⛳","Sports","#"],
-
-    ["Quantum Jump","🌀","Platformer","#"],
-
-    ["Astro Miner","⛏️","Adventure","#"],
-
-    ["Void Survivor","👾","Action","#"],
-
-    ["Turbo Bike","🏍️","Racing","#"],
-
-    ["Maze Protocol","🧩","Puzzle","#"],
-
-    ["Cyber Kart","🏎️","Racing","#"],
-
-    ["Battle Bots","⚙️","Action","#"]
-
-];
+const games = [["Slope", "⚪", "Arcade", "https://slopeio.org/"], ["Flappy Bird", "🐥", "Arcade", "https://flappybird.gg/"], ["Ragdoll Archers", "🏹", "Shooter", "https://classroom-6x.io/game/ragdoll-archers/"], ["Mech Arena", "🤖", "Action", "#"], ["Pixel Soccer", "⚽", "Sports", "#"], ["Rocket League", "🚀", "Sports", "#"], ["Synth Shooter", "🔫", "Shooter", "#"], ["Gravity Flip", "🔄", "Arcade", "#"], ["Star Racer", "🌌", "Racing", "#"], ["Cyber Chess", "♟️", "Strategy", "#"], ["Laser Dash", "⚡", "Arcade", "#"], ["Dungeon Zero", "⚔️", "Adventure", "#"], ["Sky Defender", "🛸", "Shooter", "#"], ["Street Drifter", "🏁", "Racing", "#"], ["Goal Machine", "🥅", "Sports", "#"], ["Code Breaker", "💻", "Puzzle", "#"], ["Neon Golf", "⛳", "Sports", "#"], ["Quantum Jump", "🌀", "Platformer", "#"], ["Astro Miner", "⛏️", "Adventure", "#"], ["Void Survivor", "👾", "Action", "#"], ["Turbo Bike", "🏍️", "Racing", "#"], ["Maze Protocol", "🧩", "Puzzle", "#"], ["Cyber Kart", "🏎️", "Racing", "#"], ["Battle Bots", "⚙️", "Action", "#"]];
 
 
 let active = "ALL";
@@ -1219,9 +1169,12 @@ function openGame(g) {
         g[0].toUpperCase();
 
 
-    document
-        .getElementById("modalIcon")
-        ?.textContent = g[1];
+    const modalIcon =
+        document.getElementById("modalIcon");
+
+    if (modalIcon) {
+        modalIcon.textContent = g[1];
+    }
 
 
     const gamearea =
