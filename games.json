@@ -9,13 +9,17 @@
     "Flappy Bird",
     "🐥",
     "Arcade",
-    "https://funhtml5games.com?embed=flappy"
+    "https://funhtml5games.com?embed=flappy",
+    [
+      800,
+      520
+    ]
   ],
   [
     "Ragdoll Archers",
     "🏹",
     "Shooter",
-    "https://www.crazygames.com/embed/ragdoll-archers"
+    "https://www.miniplay.com/embed/ragdoll-archers"
   ],
   [
     "Mech Arena",

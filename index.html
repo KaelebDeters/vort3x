@@ -755,6 +755,31 @@ footer {
 }
 
 /*
+   For games embedded at a fixed native
+   size (e.g. 800x520) that don't stretch
+   themselves to fill the container, we
+   size the iframe at its real native
+   dimensions, then scale the whole thing
+   up with a CSS transform so it fills the
+   available space instead of sitting
+   pinned in a corner.
+*/
+
+.gamearea iframe.fixed-size {
+
+    width:var(--native-w, 800px);
+    height:var(--native-h, 520px);
+
+    transform-origin:top left;
+
+    transform:
+        scale(
+            var(--scale-x, 1),
+            var(--scale-y, 1)
+        );
+}
+
+/*
    If the external page itself has scrollbars,
    hide them from your arcade container.
 */
@@ -1013,10 +1038,11 @@ Select a game to begin.
    GAMES
    ============================================================ */
 
-const games = [["Slope", "⚪", "Arcade", "https://y8.com/embed/slope"], ["Flappy Bird", "🐥", "Arcade", "https://funhtml5games.com?embed=flappy"], ["Ragdoll Archers", "🏹", "Shooter", "https://www.crazygames.com/embed/ragdoll-archers"], ["Mech Arena", "🤖", "Action", "#"], ["Pixel Soccer", "⚽", "Sports", "#"], ["Rocket League", "🚀", "Sports", "#"], ["Synth Shooter", "🔫", "Shooter", "#"], ["Gravity Flip", "🔄", "Arcade", "#"], ["Star Racer", "🌌", "Racing", "#"], ["Cyber Chess", "♟️", "Strategy", "#"], ["Laser Dash", "⚡", "Arcade", "#"], ["Dungeon Zero", "⚔️", "Adventure", "#"], ["Sky Defender", "🛸", "Shooter", "#"], ["Street Drifter", "🏁", "Racing", "#"], ["Goal Machine", "🥅", "Sports", "#"], ["Code Breaker", "💻", "Puzzle", "#"], ["Neon Golf", "⛳", "Sports", "#"], ["Quantum Jump", "🌀", "Platformer", "#"], ["Astro Miner", "⛏️", "Adventure", "#"], ["Void Survivor", "👾", "Action", "#"], ["Turbo Bike", "🏍️", "Racing", "#"], ["Maze Protocol", "🧩", "Puzzle", "#"], ["Cyber Kart", "🏎️", "Racing", "#"], ["Battle Bots", "⚙️", "Action", "#"]];
+const games = [["Slope", "⚪", "Arcade", "https://y8.com/embed/slope"], ["Flappy Bird", "🐥", "Arcade", "https://funhtml5games.com?embed=flappy", [800, 520]], ["Ragdoll Archers", "🏹", "Shooter", "https://www.miniplay.com/embed/ragdoll-archers"], ["Mech Arena", "🤖", "Action", "#"], ["Pixel Soccer", "⚽", "Sports", "#"], ["Rocket League", "🚀", "Sports", "#"], ["Synth Shooter", "🔫", "Shooter", "#"], ["Gravity Flip", "🔄", "Arcade", "#"], ["Star Racer", "🌌", "Racing", "#"], ["Cyber Chess", "♟️", "Strategy", "#"], ["Laser Dash", "⚡", "Arcade", "#"], ["Dungeon Zero", "⚔️", "Adventure", "#"], ["Sky Defender", "🛸", "Shooter", "#"], ["Street Drifter", "🏁", "Racing", "#"], ["Goal Machine", "🥅", "Sports", "#"], ["Code Breaker", "💻", "Puzzle", "#"], ["Neon Golf", "⛳", "Sports", "#"], ["Quantum Jump", "🌀", "Platformer", "#"], ["Astro Miner", "⛏️", "Adventure", "#"], ["Void Survivor", "👾", "Action", "#"], ["Turbo Bike", "🏍️", "Racing", "#"], ["Maze Protocol", "🧩", "Puzzle", "#"], ["Cyber Kart", "🏎️", "Racing", "#"], ["Battle Bots", "⚙️", "Action", "#"]];
 
 
 let active = "ALL";
+let currentScaleHandler = null;
 
 
 /* ============================================================
@@ -1157,6 +1183,11 @@ function render() {
 
 function openGame(g, skipFullscreen) {
 
+    if (currentScaleHandler) {
+        window.removeEventListener("resize", currentScaleHandler);
+        currentScaleHandler = null;
+    }
+
     document
         .body
         .classList
@@ -1193,9 +1224,18 @@ function openGame(g, skipFullscreen) {
 
     if (g[3] && g[3] !== "#") {
 
+        const nativeSize = g[4];
+
+        const fixedClass =
+            nativeSize
+            ? 'class="fixed-size"'
+            : '';
+
         gamearea.innerHTML = `
 
             <iframe
+
+                ${fixedClass}
 
                 src="${g[3]}"
 
@@ -1218,6 +1258,46 @@ function openGame(g, skipFullscreen) {
             ></iframe>
 
         `;
+
+        /*
+           If this game has a fixed native
+           size, scale the iframe up (or down)
+           with a CSS transform so it fills
+           the game window instead of sitting
+           pinned at its native pixel size.
+        */
+
+        if (nativeSize) {
+
+            const applyScale = () => {
+
+                const frame =
+                    gamearea.querySelector("iframe");
+
+                if (!frame) return;
+
+                const [nw, nh] = nativeSize;
+
+                const availW = gamearea.clientWidth;
+                const availH = gamearea.clientHeight;
+
+                const scaleX = availW / nw;
+                const scaleY = availH / nh;
+
+                frame.style.setProperty("--native-w", nw + "px");
+                frame.style.setProperty("--native-h", nh + "px");
+                frame.style.setProperty("--scale-x", scaleX);
+                frame.style.setProperty("--scale-y", scaleY);
+
+            };
+
+            applyScale();
+
+            currentScaleHandler = applyScale;
+
+            window.addEventListener("resize", applyScale);
+
+        }
 
     }
 
@@ -1286,6 +1366,11 @@ function openGame(g, skipFullscreen) {
    ============================================================ */
 
 function closeGame() {
+
+    if (currentScaleHandler) {
+        window.removeEventListener("resize", currentScaleHandler);
+        currentScaleHandler = null;
+    }
 
     document
         .body
