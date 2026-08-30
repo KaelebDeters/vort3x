@@ -571,12 +571,68 @@ footer {
 
 
 /* ============================================================
-   GAME BAR
+   GAME CONTROLS (close / fullscreen overlay)
    ============================================================ */
 
-.gamebar {
+.game-controls {
 
-    display:none;
+    position:fixed;
+
+    top:16px;
+
+    right:16px;
+
+    z-index:1000000;
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+.ctrl-btn {
+
+    width:44px;
+
+    height:44px;
+
+    border-radius:12px;
+
+    border:
+        1px solid
+        rgba(54,231,255,.4);
+
+    background:
+        rgba(5,7,18,.75);
+
+    backdrop-filter:blur(10px);
+
+    color:white;
+
+    font-size:20px;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    transition:.2s;
+
+}
+
+.ctrl-btn:hover {
+
+    background:
+        rgba(54,231,255,.22);
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        rgba(54,231,255,.6);
 
 }
 
@@ -907,6 +963,35 @@ VORT3X • Premium Gaming Platform • Curated Games & Experiences
 
 
 <div
+    class="game-controls"
+    id="gameControls"
+>
+
+<button
+    class="ctrl-btn"
+    onclick="closeGameSession()"
+    title="Back to VORT3X"
+>
+
+✕
+
+</button>
+
+<button
+    class="ctrl-btn"
+    id="fullscreenBtn"
+    onclick="toggleFullscreen()"
+    title="Fullscreen"
+>
+
+⛶
+
+</button>
+
+</div>
+
+
+<div
     class="gamearea"
     id="gamearea"
 >
@@ -1108,86 +1193,6 @@ function render() {
 
 
 /* ============================================================
-   SHOW PLAY SCREEN
-   ============================================================ */
-
-function showPlayScreen() {
-
-    const gamearea =
-        document.getElementById(
-            "gamearea"
-        );
-
-
-    if (!currentGame) {
-
-        gamearea.innerHTML = `
-
-            <div class="play-screen">
-
-                <div class="play-icon">
-                    🎮
-                </div>
-
-                <h2>
-                    Game Ready
-                </h2>
-
-                <p>
-                    Select a game to begin.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    gamearea.innerHTML = `
-
-        <div class="play-screen">
-
-            <div class="play-icon">
-
-                ${currentGame[1]}
-
-            </div>
-
-
-            <h2>
-
-                ${currentGame[0]}
-
-            </h2>
-
-
-            <p>
-
-                Fullscreen ended.
-                Press PLAY to start again.
-
-            </p>
-
-
-            <button
-                onclick="startCurrentGame()"
-            >
-
-                ▶ PLAY
-
-            </button>
-
-        </div>
-
-    `;
-
-}
-
-
-/* ============================================================
    LOAD GAME
    ============================================================ */
 
@@ -1210,7 +1215,25 @@ function loadCurrentGame() {
 
     if (!url || url === "#") {
 
-        showPlayScreen();
+        gamearea.innerHTML = `
+
+            <div class="play-screen">
+
+                <div class="play-icon">
+                    🚧
+                </div>
+
+                <h2>
+                    Coming Soon
+                </h2>
+
+                <p>
+                    This game doesn't have a link yet.
+                </p>
+
+            </div>
+
+        `;
 
         return;
 
@@ -1305,24 +1328,10 @@ function loadCurrentGame() {
 
 
 /* ============================================================
-   START GAME
+   TOGGLE FULLSCREEN (optional, user-triggered only)
    ============================================================ */
 
-async function startCurrentGame() {
-
-    if (!currentGame) {
-        return;
-    }
-
-
-    loadCurrentGame();
-
-
-    const modal =
-        document.getElementById(
-            "modal"
-        );
-
+async function toggleFullscreen() {
 
     const gamebox =
         document.querySelector(
@@ -1330,21 +1339,17 @@ async function startCurrentGame() {
         );
 
 
-    modal.classList.add(
-        "show"
-    );
-
-
-    /*
-        Give the iframe a moment to be inserted
-        before requesting fullscreen.
-    */
-
     try {
 
         if (!document.fullscreenElement) {
 
             await gamebox.requestFullscreen();
+
+        }
+
+        else {
+
+            await document.exitFullscreen();
 
         }
 
@@ -1382,6 +1387,11 @@ function openGame(game) {
 
     /*
         Open the game window.
+
+        This fills the browser tab (not the OS-level
+        screen) — no native fullscreen is requested
+        automatically. The user can opt into real
+        fullscreen with the ⛶ button if they want it.
     */
 
     document
@@ -1389,11 +1399,7 @@ function openGame(game) {
         .classList.add("show");
 
 
-    /*
-        Start immediately.
-    */
-
-    startCurrentGame();
+    loadCurrentGame();
 
 }
 
@@ -1456,35 +1462,37 @@ function closeGameSession() {
 
 
 /* ============================================================
-   FULLSCREEN EXIT
+   FULLSCREEN BUTTON ICON
    ============================================================ */
 
 document.addEventListener(
     "fullscreenchange",
     () => {
 
-        if (!document.fullscreenElement) {
-
-            if (currentGame) {
-
-                /*
-                    Keep the user inside game mode.
-                */
-
-                document.body.classList.add(
-                    "game-open"
-                );
+        const button =
+            document.getElementById(
+                "fullscreenBtn"
+            );
 
 
-                /*
-                    Destroy the old iframe.
-                */
-
-                showPlayScreen();
-
-            }
-
+        if (!button) {
+            return;
         }
+
+
+        /*
+            Just swap the icon to reflect state.
+
+            Exiting native fullscreen no longer
+            destroys anything or traps the user —
+            the game keeps running filling the tab,
+            and ✕ always closes it.
+        */
+
+        button.textContent =
+            document.fullscreenElement
+            ? "⛝"
+            : "⛶";
 
     }
 );
@@ -1504,11 +1512,12 @@ document.addEventListener(
 
 
         /*
-            If fullscreen is active,
-            allow the browser to exit it.
+            If native fullscreen is active,
+            let the browser exit it first.
 
-            fullscreenchange() will then
-            display the PLAY screen.
+            The game stays open in the tab-filling
+            modal — pressing Escape again will then
+            close the session below.
         */
 
         if (document.fullscreenElement) {
@@ -1525,13 +1534,13 @@ document.addEventListener(
 
 
         /*
-            If fullscreen has already ended,
-            keep the player on the PLAY screen.
+            Not in fullscreen: Escape closes the
+            game session and returns to VORT3X.
         */
 
         if (currentGame) {
 
-            showPlayScreen();
+            closeGameSession();
 
         }
 
