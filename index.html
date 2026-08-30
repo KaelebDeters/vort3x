@@ -1013,7 +1013,7 @@ Select a game to begin.
    GAMES
    ============================================================ */
 
-const games = [["Slope", "⚪", "Arcade", "https://slopeio.org/"], ["Flappy Bird", "🐥", "Arcade", "https://flappybird.gg/"], ["Ragdoll Archers", "🏹", "Shooter", "https://classroom-6x.io/game/ragdoll-archers/"], ["Mech Arena", "🤖", "Action", "#"], ["Pixel Soccer", "⚽", "Sports", "#"], ["Rocket League", "🚀", "Sports", "#"], ["Synth Shooter", "🔫", "Shooter", "#"], ["Gravity Flip", "🔄", "Arcade", "#"], ["Star Racer", "🌌", "Racing", "#"], ["Cyber Chess", "♟️", "Strategy", "#"], ["Laser Dash", "⚡", "Arcade", "#"], ["Dungeon Zero", "⚔️", "Adventure", "#"], ["Sky Defender", "🛸", "Shooter", "#"], ["Street Drifter", "🏁", "Racing", "#"], ["Goal Machine", "🥅", "Sports", "#"], ["Code Breaker", "💻", "Puzzle", "#"], ["Neon Golf", "⛳", "Sports", "#"], ["Quantum Jump", "🌀", "Platformer", "#"], ["Astro Miner", "⛏️", "Adventure", "#"], ["Void Survivor", "👾", "Action", "#"], ["Turbo Bike", "🏍️", "Racing", "#"], ["Maze Protocol", "🧩", "Puzzle", "#"], ["Cyber Kart", "🏎️", "Racing", "#"], ["Battle Bots", "⚙️", "Action", "#"]];
+const games = [["Slope", "⚪", "Arcade", "https://y8.com/embed/slope"], ["Flappy Bird", "🐥", "Arcade", "games/flappy-bird.html"], ["Ragdoll Archers", "🏹", "Shooter", "games/ragdoll-archers.html"], ["Mech Arena", "🤖", "Action", "#"], ["Pixel Soccer", "⚽", "Sports", "#"], ["Rocket League", "🚀", "Sports", "#"], ["Synth Shooter", "🔫", "Shooter", "#"], ["Gravity Flip", "🔄", "Arcade", "#"], ["Star Racer", "🌌", "Racing", "#"], ["Cyber Chess", "♟️", "Strategy", "#"], ["Laser Dash", "⚡", "Arcade", "#"], ["Dungeon Zero", "⚔️", "Adventure", "#"], ["Sky Defender", "🛸", "Shooter", "#"], ["Street Drifter", "🏁", "Racing", "#"], ["Goal Machine", "🥅", "Sports", "#"], ["Code Breaker", "💻", "Puzzle", "#"], ["Neon Golf", "⛳", "Sports", "#"], ["Quantum Jump", "🌀", "Platformer", "#"], ["Astro Miner", "⛏️", "Adventure", "#"], ["Void Survivor", "👾", "Action", "#"], ["Turbo Bike", "🏍️", "Racing", "#"], ["Maze Protocol", "🧩", "Puzzle", "#"], ["Cyber Kart", "🏎️", "Racing", "#"], ["Battle Bots", "⚙️", "Action", "#"]];
 
 
 let active = "ALL";
@@ -1155,7 +1155,7 @@ function render() {
    OPEN GAME
    ============================================================ */
 
-function openGame(g) {
+function openGame(g, skipFullscreen) {
 
     document
         .body
@@ -1251,6 +1251,33 @@ function openGame(g) {
         .getElementById("modal")
         .classList
         .add("show");
+
+
+    /*
+       By default, every game takes over the
+       entire screen immediately -- no modal
+       chrome, no header, no footer, just the
+       game. Press Escape (or the hidden exit
+       button) to get back to the directory.
+    */
+
+    if (!skipFullscreen) {
+
+        setTimeout(
+            () => {
+
+                if (!document.fullscreenElement) {
+
+                    toggleTrueFullscreen();
+
+                }
+
+            },
+            150
+        );
+
+    }
+
 }
 
 
@@ -1376,12 +1403,13 @@ function toggleTrueFullscreen() {
 
 function openGameFullscreen(g) {
 
-    openGame(g);
+    /*
+       Every game already goes fullscreen by
+       default now, so this is just an alias
+       kept for the card's fullscreen icon.
+    */
 
-    setTimeout(
-        () => toggleTrueFullscreen(),
-        150
-    );
+    openGame(g);
 
 }
 
