@@ -1,676 +1,336 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width,initial-scale=1"
->
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ragdoll Archers</title>
-
-
 <style>
-
-html,
-body {
-
-    margin:0;
-
-    width:100%;
-
-    height:100%;
-
-    overflow:hidden;
-
-    background:#111827;
-
-}
-
-
-body {
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-}
-
-
-canvas {
-
-    width:100vw;
-
-    height:100vh;
-
-    object-fit:contain;
-
-    background:
-        linear-gradient(
-            #87b6d6,
-            #cfe6ef
-        );
-
-    touch-action:none;
-
-}
-
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #1b2430;
+    overflow: hidden;
+  }
+  #wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  canvas {
+    display: block;
+    background: linear-gradient(#87b6d6, #cfe6ef);
+    touch-action: none;
+  }
+  #hint {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    opacity: .85;
+    text-shadow: 0 1px 2px rgba(0,0,0,.6);
+  }
 </style>
-
 </head>
-
-
 <body>
-
-
-<canvas
-    id="game"
-    width="800"
-    height="450"
->
-</canvas>
-
+<div id="wrap">
+  <canvas id="c" width="800" height="450"></canvas>
+</div>
+<div id="hint">Click-drag on your archer to aim &amp; set power, release to shoot. Players alternate turns.</div>
 
 <script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
 
-const canvas =
-    document.getElementById("game");
+function resize() {
+  const wrap = document.getElementById('wrap');
+  const scale = Math.min(wrap.clientWidth / 800, (wrap.clientHeight - 30) / 450);
+  canvas.style.width = (800 * scale) + 'px';
+  canvas.style.height = (450 * scale) + 'px';
+}
+window.addEventListener('resize', resize);
+resize();
 
-const ctx =
-    canvas.getContext("2d");
+const GROUND_Y = 400;
+const GRAVITY = 0.35;
 
-
-const gravity = .35;
-
-const ground = 400;
-
-
-let players;
-
-let turn;
-
-let arrow;
-
-let aiming;
-
-let aimStart;
-
-let lastMouse;
-
-let winner;
-
-
-function makePlayer(
-    x,
-    color,
-    facing
-) {
-
-    return {
-
-        x:x,
-
-        y:ground,
-
-        color:color,
-
-        facing:facing,
-
-        hp:100,
-
-        ragdoll:null
-
-    };
-
+function makeArcher(x, color, facing) {
+  return {
+    x, y: GROUND_Y, color, facing,
+    hp: 100,
+    ragdoll: null,       // when hit, becomes a tumbling body
+    armAngle: facing === 1 ? -0.3 : Math.PI + 0.3
+  };
 }
 
+let players = [makeArcher(120, '#e6533c', 1), makeArcher(680, '#3c7ae6', -1)];
+let turn = 0;
+let arrow = null;
+let aiming = false;
+let aimStart = null;
+let winner = null;
 
-function reset() {
-
-    players = [
-
-        makePlayer(
-            120,
-            "#e6533c",
-            1
-        ),
-
-        makePlayer(
-            680,
-            "#3c7ae6",
-            -1
-        )
-
-    ];
-
-
-    turn = 0;
-
-    arrow = null;
-
-    aiming = false;
-
-    winner = null;
-
+function resetRound() {
+  players = [makeArcher(120, '#e6533c', 1), makeArcher(680, '#3c7ae6', -1)];
+  turn = 0;
+  arrow = null;
+  winner = null;
 }
 
+canvas.addEventListener('mousedown', e => startAim(getPos(e)));
+canvas.addEventListener('mousemove', e => { if (aiming) moveAim(getPos(e)); });
+canvas.addEventListener('mouseup', e => endAim(getPos(e)));
 
-function mousePosition(event) {
+canvas.addEventListener('touchstart', e => { e.preventDefault(); startAim(getPos(e.touches[0])); }, { passive: false });
+canvas.addEventListener('touchmove', e => { e.preventDefault(); if (aiming) moveAim(getPos(e.touches[0])); }, { passive: false });
+canvas.addEventListener('touchend', e => { e.preventDefault(); endAim(lastPos); }, { passive: false });
 
-    const rect =
-        canvas.getBoundingClientRect();
-
-
-    return {
-
-        x:
-            (
-                event.clientX
-                -
-                rect.left
-            )
-            *
-            800
-            /
-            rect.width,
-
-
-        y:
-            (
-                event.clientY
-                -
-                rect.top
-            )
-            *
-            450
-            /
-            rect.height
-
-    };
-
+let lastPos = { x: 0, y: 0 };
+function getPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  const p = {
+    x: (e.clientX - rect.left) * (800 / rect.width),
+    y: (e.clientY - rect.top) * (450 / rect.height)
+  };
+  lastPos = p;
+  return p;
 }
 
+function startAim(p) {
+  if (arrow || winner) {
+    if (winner) resetRound();
+    return;
+  }
+  aiming = true;
+  aimStart = p;
+}
 
-canvas.addEventListener(
-    "mousedown",
-    event => {
+function moveAim(p) {
+  lastPos = p;
+}
 
-        if (winner) {
+function endAim(p) {
+  if (!aiming) return;
+  aiming = false;
+  const shooter = players[turn];
+  const dx = aimStart.x - p.x;
+  const dy = aimStart.y - p.y;
+  const power = Math.min(Math.hypot(dx, dy) / 8, 22);
+  if (power < 2) { aimStart = null; return; }
+  const angle = Math.atan2(dy, dx);
 
-            reset();
-
-            return;
-
-        }
-
-
-        if (arrow) {
-            return;
-        }
-
-
-        aiming = true;
-
-
-        aimStart =
-            mousePosition(
-                event
-            );
-
-
-        lastMouse =
-            aimStart;
-
-    }
-);
-
-
-canvas.addEventListener(
-    "mousemove",
-    event => {
-
-        if (!aiming) {
-            return;
-        }
-
-
-        lastMouse =
-            mousePosition(
-                event
-            );
-
-    }
-);
-
-
-canvas.addEventListener(
-    "mouseup",
-    event => {
-
-        if (!aiming) {
-            return;
-        }
-
-
-        aiming = false;
-
-
-        const shooter =
-            players[turn];
-
-
-        const current =
-            mousePosition(
-                event
-            );
-
-
-        const dx =
-            aimStart.x
-            -
-            current.x;
-
-
-        const dy =
-            aimStart.y
-            -
-            current.y;
-
-
-        const power =
-            Math.min(
-                Math.hypot(
-                    dx,
-                    dy
-                ) / 8,
-                22
-            );
-
-
-        if (power < 2) {
-            return;
-        }
-
-
-        const angle =
-            Math.atan2(
-                dy,
-                dx
-            );
-
-
-        arrow = {
-
-            x:
-                shooter.x
-                +
-                shooter.facing * 22,
-
-            y:
-                shooter.y
-                -
-                60,
-
-            vx:
-                Math.cos(angle)
-                *
-                power,
-
-            vy:
-                Math.sin(angle)
-                *
-                power
-
-        };
-
-    }
-);
-
+  arrow = {
+    x: shooter.x + shooter.facing * 22,
+    y: shooter.y - 60,
+    vx: Math.cos(angle) * power,
+    vy: Math.sin(angle) * power,
+    rot: angle
+  };
+  aimStart = null;
+}
 
 function update() {
+  for (const p of players) {
+    if (p.ragdoll) {
+      const r = p.ragdoll;
+      r.vy += GRAVITY;
+      r.x += r.vx;
+      r.y += r.vy;
+      r.spin += r.vspin;
+      if (r.y > GROUND_Y - 10) {
+        r.y = GROUND_Y - 10;
+        r.vy *= -0.35;
+        r.vx *= 0.7;
+        r.vspin *= 0.7;
+        if (Math.abs(r.vy) < 0.6) r.vy = 0;
+      }
+      r.x = Math.max(20, Math.min(780, r.x));
+    }
+  }
 
-    if (!arrow) {
-        return;
+  if (arrow) {
+    arrow.vy += GRAVITY * 0.6;
+    arrow.x += arrow.vx;
+    arrow.y += arrow.vy;
+    arrow.rot = Math.atan2(arrow.vy, arrow.vx);
+
+    const target = players[1 - turn];
+    const dx = arrow.x - target.x;
+    const dy = arrow.y - (target.y - 55);
+    if (!target.ragdoll && Math.hypot(dx, dy) < 32) {
+      target.hp -= 34;
+      target.ragdoll = {
+        x: target.x, y: target.y - 55,
+        vx: arrow.vx * 0.5, vy: -3,
+        spin: 0, vspin: (target.facing === 1 ? 1 : -1) * 0.25
+      };
+      arrow = null;
+      if (target.hp <= 0) {
+        winner = players[turn];
+      } else {
+        setTimeout(() => {
+          target.ragdoll = null;
+          turn = 1 - turn;
+        }, 900);
+      }
+      return;
     }
 
-
-    arrow.vy +=
-        gravity * .6;
-
-
-    arrow.x +=
-        arrow.vx;
-
-
-    arrow.y +=
-        arrow.vy;
-
-
-    const target =
-        players[1 - turn];
-
-
-    const dx =
-        arrow.x
-        -
-        target.x;
-
-
-    const dy =
-        arrow.y
-        -
-        (
-            target.y - 55
-        );
-
-
-    if (
-        !target.ragdoll
-        &&
-        Math.hypot(
-            dx,
-            dy
-        ) < 32
-    ) {
-
-        target.hp -= 34;
-
-
-        target.ragdoll = {
-
-            x:target.x,
-
-            y:target.y - 55,
-
-            vx:
-                arrow.vx * .5,
-
-            vy:-3
-
-        };
-
-
-        arrow = null;
-
-
-        if (target.hp <= 0) {
-
-            winner =
-                players[turn];
-
-        }
-
-        else {
-
-            setTimeout(
-                () => {
-
-                    target.ragdoll = null;
-
-                    turn =
-                        1 - turn;
-
-                },
-                700
-            );
-
-        }
-
-        return;
-
+    if (arrow.y > GROUND_Y || arrow.x < -20 || arrow.x > 820) {
+      arrow = null;
+      turn = 1 - turn;
     }
-
-
-    if (
-        arrow.y > ground
-        ||
-        arrow.x < -30
-        ||
-        arrow.x > 830
-    ) {
-
-        arrow = null;
-
-        turn =
-            1 - turn;
-
-    }
-
+  }
 }
 
-
-function drawPlayer(player) {
-
-    ctx.strokeStyle =
-        player.color;
-
-
-    ctx.fillStyle =
-        player.color;
-
-
-    ctx.lineWidth = 5;
-
-    ctx.lineCap =
-        "round";
-
-
-    const x =
-        player.ragdoll
-        ? player.ragdoll.x
-        : player.x;
-
-
-    const y =
-        player.ragdoll
-        ? player.ragdoll.y
-        : player.y;
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        x,
-        y
-    );
-
-
-    ctx.lineTo(
-        x,
-        y - 32
-    );
-
-
-    ctx.stroke();
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        x,
-        y - 44,
-        11,
-        0,
-        Math.PI * 2
-    );
-
-
-    ctx.fill();
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        x,
-        y
-    );
-
-
-    ctx.lineTo(
-        x - 10,
-        y + 28
-    );
-
-
-    ctx.moveTo(
-        x,
-        y
-    );
-
-
-    ctx.lineTo(
-        x + 10,
-        y + 28
-    );
-
-
-    ctx.stroke();
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        x,
-        y - 26
-    );
-
-
-    ctx.lineTo(
-        x + player.facing * 25,
-        y - 26
-    );
-
-
-    ctx.stroke();
-
+function drawGround() {
+  ctx.fillStyle = '#7fae57';
+  ctx.fillRect(0, GROUND_Y, 800, 450 - GROUND_Y);
+  ctx.fillStyle = '#5c8a3d';
+  ctx.fillRect(0, GROUND_Y, 800, 6);
 }
 
+function drawStick(x, y, color, facing, armAngle, tumble) {
+  ctx.save();
+  ctx.translate(x, y);
+  if (tumble !== undefined) ctx.rotate(tumble);
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineWidth = 5;
+  ctx.lineCap = 'round';
+
+  // legs
+  ctx.beginPath();
+  ctx.moveTo(0, 0); ctx.lineTo(-10, 28);
+  ctx.moveTo(0, 0); ctx.lineTo(10, 28);
+  ctx.stroke();
+
+  // body
+  ctx.beginPath();
+  ctx.moveTo(0, 0); ctx.lineTo(0, -32);
+  ctx.stroke();
+
+  // head
+  ctx.beginPath();
+  ctx.arc(0, -44, 11, 0, Math.PI * 2);
+  ctx.fill();
+
+  // back arm
+  ctx.beginPath();
+  ctx.moveTo(0, -26); ctx.lineTo(-facing * 12, -10);
+  ctx.stroke();
+
+  // front arm (bow arm)
+  ctx.save();
+  ctx.translate(0, -26);
+  ctx.rotate(armAngle || 0);
+  ctx.beginPath();
+  ctx.moveTo(0, 0); ctx.lineTo(20, 0);
+  ctx.stroke();
+  ctx.restore();
+
+  ctx.restore();
+}
+
+function drawArrow(a) {
+  ctx.save();
+  ctx.translate(a.x, a.y);
+  ctx.rotate(a.rot);
+  ctx.strokeStyle = '#3a2a1a';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(-14, 0); ctx.lineTo(10, 0);
+  ctx.stroke();
+  ctx.fillStyle = '#3a2a1a';
+  ctx.beginPath();
+  ctx.moveTo(10, 0); ctx.lineTo(4, -4); ctx.lineTo(4, 4);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawAimLine() {
+  if (!aiming || !aimStart) return;
+  const shooter = players[turn];
+  ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([6, 6]);
+  ctx.beginPath();
+  ctx.moveTo(shooter.x, shooter.y - 60);
+  const dx = aimStart.x - lastPos.x;
+  const dy = aimStart.y - lastPos.y;
+  ctx.lineTo(shooter.x + dx, shooter.y - 60 + dy);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function drawHealth() {
+  players.forEach((p, i) => {
+    const x = i === 0 ? 30 : 570;
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.fillRect(x, 16, 200, 16);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(x, 16, 200 * Math.max(p.hp, 0) / 100, 16);
+    ctx.strokeStyle = '#fff';
+    ctx.strokeRect(x, 16, 200, 16);
+  });
+}
+
+function drawTurnBanner() {
+  ctx.fillStyle = '#fff';
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 3;
+  ctx.font = 'bold 20px Arial, sans-serif';
+  ctx.textAlign = 'center';
+  if (winner) {
+    const label = (winner === players[0] ? 'Red' : 'Blue') + ' Wins! Click to play again';
+    ctx.strokeText(label, 400, 60);
+    ctx.fillText(label, 400, 60);
+  } else {
+    const label = (turn === 0 ? 'Red' : 'Blue') + "'s turn — drag to aim";
+    ctx.strokeText(label, 400, 60);
+    ctx.fillText(label, 400, 60);
+  }
+}
 
 function draw() {
+  ctx.clearRect(0, 0, 800, 450);
+  drawGround();
 
-    ctx.clearRect(
-        0,
-        0,
-        800,
-        450
-    );
-
-
-    ctx.fillStyle =
-        "#7fae57";
-
-
-    ctx.fillRect(
-        0,
-        ground,
-        800,
-        50
-    );
-
-
-    players.forEach(
-        drawPlayer
-    );
-
-
-    if (arrow) {
-
-        ctx.strokeStyle =
-            "#3a2a1a";
-
-
-        ctx.lineWidth = 3;
-
-
-        ctx.beginPath();
-
-
-        ctx.moveTo(
-            arrow.x - 14,
-            arrow.y
-        );
-
-
-        ctx.lineTo(
-            arrow.x + 14,
-            arrow.y
-        );
-
-
-        ctx.stroke();
-
+  players.forEach((p, i) => {
+    if (p.ragdoll) {
+      drawStick(p.ragdoll.x, p.ragdoll.y, p.color, p.facing, 0, p.ragdoll.spin);
+    } else {
+      let armAngle = p.facing === 1 ? -0.3 : Math.PI + 0.3;
+      if (aiming && turn === i && aimStart) {
+        const dx = aimStart.x - lastPos.x;
+        const dy = aimStart.y - lastPos.y;
+        armAngle = Math.atan2(dy, dx) - (p.facing === 1 ? 0 : Math.PI);
+      }
+      drawStick(p.x, p.y, p.color, p.facing, armAngle);
     }
+  });
 
-
-    ctx.fillStyle =
-        "#fff";
-
-
-    ctx.font =
-        "bold 20px Arial";
-
-
-    ctx.textAlign =
-        "center";
-
-
-    if (winner) {
-
-        ctx.fillText(
-            "WINNER! CLICK TO PLAY AGAIN",
-            400,
-            60
-        );
-
-    }
-
-    else {
-
-        ctx.fillText(
-
-            turn === 0
-            ? "RED'S TURN"
-            : "BLUE'S TURN",
-
-            400,
-            60
-
-        );
-
-    }
-
+  if (arrow) drawArrow(arrow);
+  drawAimLine();
+  drawHealth();
+  drawTurnBanner();
 }
-
 
 function loop() {
-
-    update();
-
-    draw();
-
-    requestAnimationFrame(
-        loop
-    );
-
+  update();
+  draw();
+  requestAnimationFrame(loop);
 }
 
-
-reset();
-
 loop();
-
 </script>
-
 </body>
-
 </html>

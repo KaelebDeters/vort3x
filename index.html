@@ -1,87 +1,45 @@
 
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>
-VORT3X — Gaming Platform
-</title>
-
+<title>VORT3X — Gaming Platform</title>
 
 <style>
 
-
-/* ============================================================
-   ROOT
-   ============================================================ */
-
 :root {
-
     --bg:#050712;
-
     --panel:#0b1020;
-
     --panel2:#11182d;
-
     --text:#eef4ff;
-
     --muted:#8e9bb8;
-
-    --cyan:#36e7ff;
-
+    --cyan:#39ff8a;
     --purple:#9b5cff;
-
     --pink:#ff4fd8;
-
     --green:#5cff9d;
-
-    --border:
-        rgba(112,151,255,.18);
-
+    --border:rgba(112,151,255,.18);
 }
-
-
-/* ============================================================
-   RESET
-   ============================================================ */
 
 * {
-
     box-sizing:border-box;
-
 }
-
 
 html,
 body {
-
     margin:0;
-
     min-height:100%;
-
 }
-
-
-/* ============================================================
-   BODY
-   ============================================================ */
 
 body {
 
     background:
-
         radial-gradient(
             circle at 10% 10%,
-            rgba(54,231,255,.12),
+            rgba(57,255,138,.12),
             transparent 28%
         ),
 
@@ -98,8 +56,7 @@ body {
             #050711
         );
 
-    color:
-        var(--text);
+    color:var(--text);
 
     font-family:
         Inter,
@@ -108,53 +65,62 @@ body {
         sans-serif;
 
     min-height:100vh;
-
 }
-
-
-/* ============================================================
-   GAME MODE
-   ============================================================ */
 
 body.game-open {
-
-    overflow:hidden !important;
-
+    overflow:hidden;
 }
-
 
 body.game-open header,
 body.game-open main,
 body.game-open footer {
-
-    display:none !important;
-
+    display:none;
 }
 
+/* GRID BACKGROUND */
 
-/* ============================================================
-   HEADER
-   ============================================================ */
+body::before {
+
+    content:"";
+
+    position:fixed;
+    inset:0;
+
+    pointer-events:none;
+
+    opacity:.18;
+
+    background-image:
+
+        linear-gradient(
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        );
+
+    background-size:40px 40px;
+}
+
+/* HEADER */
 
 header {
 
     position:sticky;
-
     top:0;
-
     z-index:20;
 
-    backdrop-filter:
-        blur(18px);
+    backdrop-filter:blur(18px);
 
-    background:
-        rgba(5,7,18,.78);
+    background:rgba(5,7,18,.78);
 
     border-bottom:
         1px solid var(--border);
-
 }
-
 
 .nav {
 
@@ -162,17 +128,14 @@ header {
 
     margin:auto;
 
-    padding:
-        18px 24px;
+    padding:18px 24px;
 
     display:flex;
 
     gap:24px;
 
     align-items:center;
-
 }
-
 
 .logo {
 
@@ -183,9 +146,7 @@ header {
     font-size:20px;
 
     white-space:nowrap;
-
 }
-
 
 .logo span {
 
@@ -193,22 +154,14 @@ header {
 
     text-shadow:
         0 0 18px var(--cyan);
-
 }
-
-
-/* ============================================================
-   SEARCH
-   ============================================================ */
 
 .search {
 
     flex:1;
 
     position:relative;
-
 }
-
 
 .search input {
 
@@ -232,9 +185,17 @@ header {
     outline:none;
 
     font-size:15px;
-
 }
 
+.search input:focus {
+
+    border-color:
+        rgba(57,255,138,.55);
+
+    box-shadow:
+        0 0 25px
+        rgba(57,255,138,.1);
+}
 
 .search::before {
 
@@ -249,22 +210,16 @@ header {
     font-size:24px;
 
     color:var(--muted);
-
 }
-
-
-/* ============================================================
-   BUTTONS
-   ============================================================ */
 
 .btn {
 
     border:
         1px solid
-        rgba(54,231,255,.35);
+        rgba(57,255,138,.35);
 
     background:
-        rgba(54,231,255,.08);
+        rgba(57,255,138,.08);
 
     color:white;
 
@@ -277,20 +232,19 @@ header {
 
     font-weight:700;
 
+    transition:.2s;
 }
-
 
 .btn:hover {
 
     background:
-        rgba(54,231,255,.17);
+        rgba(57,255,138,.17);
 
+    transform:
+        translateY(-1px);
 }
 
-
-/* ============================================================
-   MAIN
-   ============================================================ */
+/* MAIN */
 
 main {
 
@@ -300,9 +254,9 @@ main {
 
     padding:
         34px 24px 70px;
-
 }
 
+/* DIRECTORY */
 
 .section-head {
 
@@ -314,31 +268,27 @@ main {
 
     margin:
         42px 0 18px;
-
 }
-
 
 .section-head h2 {
 
     margin:0;
 
-    font-size:26px;
+    font-size:30px;
 
+    font-weight:900;
+
+    letter-spacing:-.5px;
 }
-
 
 .count {
 
     color:var(--muted);
 
     font-size:13px;
-
 }
 
-
-/* ============================================================
-   FILTERS
-   ============================================================ */
+/* FILTERS */
 
 .filters {
 
@@ -349,14 +299,13 @@ main {
     flex-wrap:wrap;
 
     margin-bottom:20px;
-
 }
-
 
 .filter {
 
     border:
-        1px solid var(--border);
+        1px solid
+        var(--border);
 
     background:transparent;
 
@@ -368,9 +317,7 @@ main {
     border-radius:999px;
 
     cursor:pointer;
-
 }
-
 
 .filter.active,
 .filter:hover {
@@ -378,17 +325,13 @@ main {
     color:white;
 
     border-color:
-        rgba(54,231,255,.45);
+        rgba(57,255,138,.45);
 
     background:
-        rgba(54,231,255,.08);
-
+        rgba(57,255,138,.08);
 }
 
-
-/* ============================================================
-   GRID
-   ============================================================ */
+/* GAME GRID */
 
 .grid {
 
@@ -398,18 +341,13 @@ main {
         repeat(4,1fr);
 
     gap:16px;
-
 }
 
-
-/* ============================================================
-   CARD
-   ============================================================ */
+/* GAME CARD */
 
 .card {
 
     background:
-
         linear-gradient(
             150deg,
             rgba(17,24,45,.94),
@@ -417,7 +355,8 @@ main {
         );
 
     border:
-        1px solid var(--border);
+        1px solid
+        var(--border);
 
     border-radius:19px;
 
@@ -427,8 +366,8 @@ main {
 
     cursor:pointer;
 
+    position:relative;
 }
-
 
 .card:hover {
 
@@ -436,7 +375,7 @@ main {
         translateY(-5px);
 
     border-color:
-        rgba(54,231,255,.42);
+        rgba(57,255,138,.42);
 
     box-shadow:
 
@@ -444,14 +383,47 @@ main {
         rgba(0,0,0,.3),
 
         0 0 25px
-        rgba(54,231,255,.07);
-
+        rgba(57,255,138,.07);
 }
 
+/* CARD FULLSCREEN */
 
-/* ============================================================
-   THUMB
-   ============================================================ */
+.card-fullscreen {
+
+    position:absolute;
+
+    top:8px;
+    right:8px;
+
+    background:
+        rgba(0,0,0,.6);
+
+    border:
+        1px solid
+        var(--cyan);
+
+    color:var(--cyan);
+
+    border-radius:8px;
+
+    padding:
+        6px 8px;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+    display:none;
+
+    z-index:10;
+}
+
+.card:hover .card-fullscreen {
+
+    display:block;
+}
+
+/* THUMB */
 
 .thumb {
 
@@ -469,32 +441,50 @@ main {
 
         radial-gradient(
             circle at 50% 40%,
-            rgba(54,231,255,.18),
+            rgba(57,255,138,.18),
             transparent 42%
         ),
 
         #080c1b;
-
 }
 
+.card:nth-child(3n) .thumb {
 
-/* ============================================================
-   INFO
-   ============================================================ */
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(155,92,255,.2),
+            transparent 45%
+        ),
+
+        #0b0a1c;
+}
+
+.card:nth-child(4n) .thumb {
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(255,79,216,.16),
+            transparent 45%
+        ),
+
+        #12091a;
+}
+
+/* CARD INFO */
 
 .info {
 
     padding:15px;
-
 }
-
 
 .title {
 
     font-weight:800;
-
 }
-
 
 .meta {
 
@@ -507,20 +497,14 @@ main {
     color:var(--muted);
 
     font-size:12px;
-
 }
-
 
 .tag {
 
     color:var(--cyan);
-
 }
 
-
-/* ============================================================
-   EMPTY
-   ============================================================ */
+/* EMPTY */
 
 .empty {
 
@@ -531,13 +515,9 @@ main {
     padding:60px;
 
     display:none;
-
 }
 
-
-/* ============================================================
-   FOOTER
-   ============================================================ */
+/* FOOTER */
 
 footer {
 
@@ -548,16 +528,252 @@ footer {
     padding:30px;
 
     border-top:
-        1px solid var(--border);
+        1px solid
+        var(--border);
 
     font-size:13px;
-
 }
 
+/* ==========================================================
+   AI PICK PANEL
+   ========================================================== */
 
-/* ============================================================
+.ai-btn {
+
+    border-color:
+        rgba(57,255,138,.5);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(57,255,138,.14),
+            rgba(57,255,138,.04)
+        );
+}
+
+.ai-backdrop {
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(0,0,0,.55);
+
+    backdrop-filter:
+        blur(4px);
+
+    z-index:59;
+
+    display:none;
+}
+
+.ai-backdrop.show {
+
+    display:block;
+}
+
+.ai-panel {
+
+    position:fixed;
+
+    top:0;
+
+    right:-420px;
+
+    width:min(420px,92vw);
+
+    height:100vh;
+
+    background:
+        linear-gradient(
+            160deg,
+            rgba(6,12,8,.98),
+            rgba(3,6,4,.99)
+        );
+
+    border-left:
+        1px solid
+        rgba(57,255,138,.25);
+
+    box-shadow:
+        -20px 0 60px
+        rgba(0,0,0,.5);
+
+    z-index:60;
+
+    padding:26px;
+
+    transition:
+        right .28s ease;
+
+    overflow-y:auto;
+}
+
+.ai-panel.show {
+
+    right:0;
+}
+
+.ai-panel-head {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:14px;
+}
+
+.ai-panel-title {
+
+    font-weight:900;
+
+    letter-spacing:1px;
+
+    color:var(--cyan);
+
+    text-shadow:
+        0 0 14px
+        rgba(57,255,138,.5);
+}
+
+.ai-close {
+
+    background:transparent;
+
+    border:none;
+
+    color:var(--muted);
+
+    font-size:18px;
+
+    cursor:pointer;
+}
+
+.ai-sub {
+
+    color:var(--muted);
+
+    font-size:13.5px;
+
+    line-height:1.5;
+
+    margin:0 0 18px;
+}
+
+.ai-input-row {
+
+    display:flex;
+
+    gap:8px;
+
+    margin-bottom:20px;
+}
+
+.ai-input {
+
+    flex:1;
+
+    padding:12px 14px;
+
+    border-radius:12px;
+
+    border:
+        1px solid
+        rgba(57,255,138,.25);
+
+    background:#050a06;
+
+    color:white;
+
+    outline:none;
+
+    font-size:14px;
+}
+
+.ai-input:focus {
+
+    border-color:
+        rgba(57,255,138,.6);
+}
+
+.ai-go {
+
+    white-space:nowrap;
+}
+
+.ai-results {
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+}
+
+.ai-suggestion {
+
+    display:flex;
+
+    gap:12px;
+
+    align-items:center;
+
+    padding:14px;
+
+    border-radius:14px;
+
+    border:
+        1px solid
+        rgba(57,255,138,.2);
+
+    background:
+        rgba(57,255,138,.05);
+
+    cursor:pointer;
+
+    transition:.15s;
+}
+
+.ai-suggestion:hover {
+
+    background:
+        rgba(57,255,138,.12);
+
+    transform:
+        translateX(-3px);
+}
+
+.ai-suggestion .icon {
+
+    font-size:30px;
+}
+
+.ai-suggestion .why {
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    margin-top:2px;
+}
+
+.ai-empty {
+
+    color:var(--muted);
+
+    font-size:13.5px;
+
+    text-align:center;
+
+    padding:30px 10px;
+}
+
+/* ==========================================================
    GAME MODAL
-   ============================================================ */
+   ========================================================== */
 
 .modal {
 
@@ -565,18 +781,18 @@ footer {
 
     inset:0;
 
-    background:#000;
+    background:
+        rgba(0,0,0,.95);
+
+    backdrop-filter:
+        blur(12px);
 
     display:none;
 
-    z-index:999999;
+    z-index:50;
 
-    width:100vw;
-
-    height:100vh;
-
+    padding:0;
 }
-
 
 .modal.show {
 
@@ -586,99 +802,166 @@ footer {
 
     justify-content:center;
 
+    padding:
+        4vh 4vw;
 }
 
+/* TRUE FULLSCREEN */
 
-/* ============================================================
-   GAME BOX
-   ============================================================ */
+.modal.fullscreen {
+
+    inset:0;
+
+    background:#000;
+
+    padding:0;
+
+    border-radius:0;
+}
+
+.modal.fullscreen .gamebox {
+
+    width:100vw;
+
+    height:100vh;
+
+    border-radius:0;
+
+    border:none;
+
+    box-shadow:none;
+}
+
+.modal.fullscreen .gamebar {
+
+    display:none;
+}
+
+/* GAME BOX */
 
 .gamebox {
 
-    width:100vw;
+    width:
+        min(1100px,100%);
 
-    height:100vh;
+    height:
+        min(760px,92vh);
 
-    background:#000;
-
-    overflow:hidden;
-
-    position:relative;
-
-}
-
-
-/* ============================================================
-   CONTROLS
-   ============================================================ */
-
-.game-controls {
-
-    position:fixed;
-
-    top:16px;
-
-    right:16px;
-
-    z-index:1000000;
-
-    display:flex;
-
-    gap:10px;
-
-}
-
-
-.ctrl-btn {
-
-    width:44px;
-
-    height:44px;
-
-    border-radius:12px;
+    background:#050712;
 
     border:
         1px solid
-        rgba(54,231,255,.4);
+        rgba(57,255,138,.3);
 
-    background:
-        rgba(5,7,18,.75);
+    border-radius:22px;
 
-    backdrop-filter:
-        blur(10px);
-
-    color:white;
-
-    font-size:20px;
-
-    cursor:pointer;
+    overflow:hidden;
 
     display:flex;
 
+    flex-direction:column;
+
+    box-shadow:
+        0 0 80px
+        rgba(57,255,138,.12);
+}
+
+/* GAME BAR */
+
+.gamebar {
+
+    padding:
+        12px 16px;
+
+    display:flex;
+
+    justify-content:space-between;
+
     align-items:center;
 
-    justify-content:center;
-
-}
-
-
-.ctrl-btn:hover {
+    border-bottom:
+        1px solid
+        var(--border);
 
     background:
-        rgba(54,231,255,.22);
-
+        rgba(5,7,18,.95);
 }
 
+.gamebar-left {
 
-/* ============================================================
+    font-weight:700;
+
+    color:white;
+}
+
+.gamebar-right {
+
+    display:flex;
+
+    gap:8px;
+
+    align-items:center;
+}
+
+/* FULLSCREEN BUTTON */
+
+.fullscreen-btn {
+
+    background:
+        rgba(57,255,138,.1);
+
+    border:
+        1px solid
+        rgba(57,255,138,.3);
+
+    color:var(--cyan);
+
+    padding:
+        8px 12px;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    font-size:13px;
+}
+
+/* EXIT */
+
+.exit-btn {
+
+    display:none;
+
+    background:
+        rgba(255,79,216,.1);
+
+    border:
+        1px solid
+        rgba(255,79,216,.3);
+
+    color:#ff4fd8;
+
+    padding:
+        8px 12px;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    font-size:13px;
+}
+
+/* ==========================================================
    GAME AREA
-   ============================================================ */
+   ========================================================== */
 
 .gamearea {
 
-    width:100vw;
-
-    height:100vh;
+    flex:1;
 
     position:relative;
 
@@ -686,21 +969,23 @@ footer {
 
     background:#000;
 
+    display:flex;
 }
 
+/*
+   THIS IS THE IMPORTANT PART.
 
-/* ============================================================
-   IFRAME
-   ============================================================ */
+   The iframe fills the entire game area.
+*/
 
 .gamearea iframe {
 
     position:absolute;
 
-    inset:0;
+    top:0;
+    left:0;
 
     width:100%;
-
     height:100%;
 
     border:none;
@@ -708,96 +993,79 @@ footer {
     display:block;
 
     background:#000;
-
 }
 
+/*
+   For games embedded at a fixed native
+   size (e.g. 800x520) that don't stretch
+   themselves to fill the container, we
+   size the iframe at its real native
+   dimensions, then scale the whole thing
+   up with a CSS transform so it fills the
+   available space instead of sitting
+   pinned in a corner.
+*/
 
-/* ============================================================
-   PLAY SCREEN
-   ============================================================ */
+.gamearea iframe.fixed-size {
 
-.play-screen {
+    width:var(--native-w, 800px);
+    height:var(--native-h, 520px);
 
-    position:absolute;
+    transform-origin:top left;
 
-    inset:0;
+    transform:
+        scale(
+            var(--scale-x, 1),
+            var(--scale-y, 1)
+        );
+}
 
-    display:flex;
+/*
+   If the external page itself has scrollbars,
+   hide them from your arcade container.
+*/
 
-    align-items:center;
+.gamearea {
 
-    justify-content:center;
+    scrollbar-width:none;
+}
 
-    flex-direction:column;
+.gamearea::-webkit-scrollbar {
 
-    gap:14px;
+    display:none;
+}
 
-    background:
+/* DEMO */
 
-        radial-gradient(
-            circle at 50% 40%,
-            rgba(54,231,255,.13),
-            transparent 35%
-        ),
-
-        #050712;
+.demo {
 
     text-align:center;
 
-    z-index:10;
+    padding:30px;
 
+    margin:auto;
 }
 
-
-.play-icon {
+.demo .big {
 
     font-size:80px;
-
 }
 
+.demo h2 {
 
-.play-screen h2 {
-
-    margin:0;
-
-    font-size:34px;
-
+    font-size:32px;
 }
 
-
-.play-screen p {
-
-    margin:0 0 12px;
+.demo p {
 
     color:var(--muted);
 
+    max-width:500px;
+
+    line-height:1.6;
 }
 
-
-.play-screen button {
-
-    border:
-        1px solid
-        rgba(54,231,255,.55);
-
-    background:
-        rgba(54,231,255,.10);
-
-    color:white;
-
-    padding:
-        14px 30px;
-
-    border-radius:13px;
-
-    cursor:pointer;
-
-    font-size:16px;
-
-    font-weight:800;
-
-}
-
+/* RESPONSIVE */
 
 @media(max-width:1050px) {
 
@@ -805,11 +1073,8 @@ footer {
 
         grid-template-columns:
             repeat(3,1fr);
-
     }
-
 }
-
 
 @media(max-width:760px) {
 
@@ -817,13 +1082,11 @@ footer {
 
         grid-template-columns:
             repeat(2,1fr);
-
     }
 
     .nav {
 
         flex-wrap:wrap;
-
     }
 
     .search {
@@ -831,76 +1094,114 @@ footer {
         order:3;
 
         flex-basis:100%;
-
     }
-
 }
-
 
 @media(max-width:480px) {
 
     .grid {
 
         grid-template-columns:1fr;
-
     }
 
     main {
 
         padding:
             20px 14px;
-
     }
-
 }
 
 </style>
 
 </head>
 
-
 <body>
-
 
 <header>
 
 <div class="nav">
 
-
 <div class="logo">
-
 VOR<span>T</span>3X
-
 </div>
-
 
 <div class="search">
 
 <input
-    id="search"
-    placeholder="Search titles, genres, explore..."
+id="search"
+placeholder="Search titles, genres, explore..."
 >
 
 </div>
 
-
 <button
-    class="btn"
-    onclick="randomGame()"
+class="btn"
+onclick="randomGame()"
 >
-
 ⚡ RANDOM
-
 </button>
 
+<button
+class="btn ai-btn"
+onclick="toggleAiPanel()"
+>
+✦ AI PICK
+</button>
 
 </div>
 
 </header>
 
 
-<main>
+<!-- ============================================================
+     AI RECOMMENDER PANEL
 
+     Fully self-contained — no external API calls, no key to
+     manage. It matches whatever mood/genre you type against
+     the games actually in this catalog and suggests a few.
+     Runs the same whether this page is opened locally or
+     hosted anywhere, including GitHub Pages.
+     ============================================================ -->
+
+<div class="ai-panel" id="aiPanel">
+
+<div class="ai-panel-head">
+
+<div class="ai-panel-title">
+✦ VORT3X AI PICK
+</div>
+
+<button class="ai-close" onclick="toggleAiPanel()">✕</button>
+
+</div>
+
+<p class="ai-sub">
+Tell it the mood — "something fast and competitive",
+"relaxing puzzle", "shooting stuff" — and it'll pick from
+what's actually in the directory.
+</p>
+
+<div class="ai-input-row">
+
+<input
+id="aiInput"
+class="ai-input"
+placeholder="What are you in the mood for?"
+onkeydown="if(event.key==='Enter') runAiPick()"
+>
+
+<button class="btn ai-go" onclick="runAiPick()">GO</button>
+
+</div>
+
+<div class="ai-results" id="aiResults"></div>
+
+</div>
+
+<div class="ai-backdrop" id="aiBackdrop" onclick="toggleAiPanel()"></div>
+
+
+<main>
 
 <div class="section-head">
 
@@ -908,147 +1209,136 @@ VOR<span>T</span>3X
 GAMING DIRECTORY
 </h2>
 
-
 <div
-    class="count"
-    id="count"
-></div>
-
-
-</div>
-
-
-<div
-    class="filters"
-    id="filters"
-></div>
-
-
-<div
-    class="grid"
-    id="grid"
-></div>
-
-
-<div
-    class="empty"
-    id="empty"
+class="count"
+id="count"
 >
-
-No games found.
+</div>
 
 </div>
 
+
+<div
+class="filters"
+id="filters"
+>
+</div>
+
+
+<div
+class="grid"
+id="grid"
+>
+</div>
+
+
+<div
+class="empty"
+id="empty"
+>
+No games found. Try another search.
+</div>
 
 </main>
 
 
 <footer>
 
-VORT3X • Premium Gaming Platform
-
-<br>
-
-Game-source credit:
-<strong>NotKappy</strong>
+VORT3X • Premium Gaming Platform • Curated Games & Experiences
 
 </footer>
 
 
-<div
-    class="modal"
-    id="modal"
->
+<!-- GAME WINDOW -->
 
+<div
+class="modal"
+id="modal"
+>
 
 <div class="gamebox">
 
+<div class="gamebar">
 
-<div class="game-controls">
+<div
+class="gamebar-left"
+id="modalTitle"
+>
+GAME
+</div>
 
+<div class="gamebar-right">
 
 <button
-    class="ctrl-btn"
-    onclick="closeGameSession()"
-    title="Back to VORT3X"
+class="fullscreen-btn"
+id="fsBtn"
+onclick="toggleTrueFullscreen()"
 >
-
-✕
-
+⛶ FULLSCREEN
 </button>
-
 
 <button
-    class="ctrl-btn"
-    id="fullscreenBtn"
-    onclick="toggleFullscreen()"
-    title="Fullscreen"
+class="exit-btn"
+onclick="closeGame()"
 >
-
-⛶
-
+✕ EXIT
 </button>
 
+<button
+class="btn"
+id="closeBtn"
+onclick="closeGame()"
+>
+✕ CLOSE
+</button>
+
+</div>
 
 </div>
 
 
 <div
-    class="gamearea"
-    id="gamearea"
+class="gamearea"
+id="gamearea"
 >
 
+<div class="demo">
 
-<div class="play-screen">
-
-
-<div class="play-icon">
-
+<div
+class="big"
+id="modalIcon"
+>
 🎮
-
 </div>
-
 
 <h2>
-
 Game Ready
-
 </h2>
 
-
 <p>
-
 Select a game to begin.
-
 </p>
 
+</div>
 
 </div>
 
-
 </div>
-
-
-</div>
-
 
 </div>
 
 
 <script>
 
-
 /* ============================================================
-   GAME DATA
+   GAMES
    ============================================================ */
 
-const games =
-[["Geometry Dash", "🔺", "Arcade", "https://911games.io/geometry-dash"], ["Slope Unblocked", "⚪", "Arcade", "https://w3admin.w3technic.com/games/slope/"], ["Block Post", "🧱", "Shooter", "https://911games.io/block-post"], ["Retro Bowl", "🏈", "Sports", "https://911games.io/retro-bowl"], ["Stack Ball", "🔵", "Arcade", "https://911games.io/stack-ball"], ["Retro Bowl College", "🏈", "Sports", "https://911games.io/retro-bowl-college"], ["Retro Bowl 2", "🏈", "Sports", "https://911games.io/retro-bowl-2"], ["PolyTrack", "🏎️", "Racing", "https://sites.google.com/view/classroomm15x/poly-track?authuser=0"], ["Basketball Legends", "🏀", "Sports", "https://911games.io/basketball-legends"], ["Basketball Stars", "🏀", "Sports", "https://911games.io/basketball-stars"], ["Bouncy Basketball", "🏀", "Sports", "https://911games.io/bouncy-basketball"], ["Basketball Legends 2020", "🏀", "Sports", "https://911games.io/basketball-legends-2020"], ["Run 3", "🏃", "Runner", "https://911games.io/run-3"], ["Subway Surfers Winter Holiday", "🚇", "Runner", "https://911games.io/subway-surfers-winter-holiday"], ["Traffic Rush!", "🚦", "Runner", "https://911games.io/traffic-rush"], ["G Switch 4", "🔀", "Runner", "https://911games.io/g-switch-4"], ["Jetpack Joyride", "🚀", "Runner", "https://911games.io/jetpack-joyride"], ["Skiing Fred", "⛷️", "Runner", "https://911games.io/skiing-fred"], ["Tiger Simulator 3D", "🐯", "Runner", "https://911games.io/tiger-simulator-3d"], ["1v1.LOL", "🔫", "Shooter", "https://911games.io/1v1-lol"], ["Rooftop Snipers", "🎯", "Shooter", "https://911games.io/rooftop-snipers"], ["Bubble Shooter", "🫧", "Puzzle", "https://911games.io/bubble-shooter"], ["Raft Wars", "🚤", "Shooter", "https://911games.io/raft-wars"], ["Stick Defenders", "🏹", "Shooter", "https://911games.io/stick-defenders"], ["Puppet Master", "🥋", "Shooter", "https://911games.io/puppet-master"], ["Drive Mad", "🚗", "Racing", "https://911games.io/drive-mad"], ["Jelly Truck", "🚚", "Racing", "https://911games.io/jelly-truck"], ["Traffic Rider", "🏍️", "Racing", "https://911games.io/traffic-rider"], ["Offroader V5", "🚙", "Racing", "https://911games.io/offroader-v5"], ["Rally Champion", "🏁", "Racing", "https://911games.io/rally-champion"], ["Noob Drive", "🚘", "Racing", "https://911games.io/noob-drive"], ["Merge Cyber Racers", "🏎️", "Racing", "https://911games.io/merge-cyber-racers"], ["Stock Car Hero", "🏎️", "Racing", "https://911games.io/stock-car-hero"], ["Google Solitaire", "🃏", "Card", "https://911games.io/google-solitaire"], ["Mahjong", "🀄", "Card", "https://911games.io/mahjong"], ["Freecell", "🃏", "Card", "https://911games.io/freecell"], ["Classic Hearts", "❤️", "Card", "https://911games.io/classic-hearts"], ["Cribbage", "🃏", "Card", "https://911games.io/cribbage"], ["Blackjack", "♠️", "Card", "https://911games.io/blackjack"], ["Spades Online", "♠️", "Card", "https://911games.io/spades-online"], ["Gin Rummy", "🃏", "Card", "https://911games.io/gin-rummy"], ["Google Snake", "🐍", "Classic", "https://911games.io/google-snake"], ["Snake", "🐍", "Classic", "https://911games.io/snake"], ["Agario", "🔵", "Classic", "https://911games.io/agario"], ["Idle Breakout", "🧱", "Classic", "https://911games.io/idle-breakout"], ["Minecraft Classic", "⛏️", "Classic", "https://911games.io/minecraft-classic"], ["Hexanaut", "⬡", "Classic", "https://911games.io/hexanaut"], ["Zuma Jungle Legend", "🟢", "Classic", "https://911games.io/zuma-jungle-legend"], ["2048", "🔢", "Puzzle", "https://911games.io/2048-2"], ["Minesweeper", "💣", "Puzzle", "https://911games.io/minesweeper"], ["Sudoku", "🔢", "Puzzle", "https://911games.io/sudoku"], ["Tetris", "🧩", "Puzzle", "https://911games.io/tetris"], ["Hangman", "🔤", "Puzzle", "https://911games.io/hangman"], ["Outspell", "📝", "Puzzle", "https://911games.io/outspell"], ["Bloxorz", "🧊", "Puzzle", "https://911games.io/bloxorz-2"], ["Powerline io", "⚡", "Puzzle", "https://911games.io/powerline-io"], ["Google Feud", "❓", "Puzzle", "https://911games.io/google-fued"], ["Pac Man", "🟡", "Action", "https://911games.io/pac-man"], ["Car Parking Multiplayer", "🅿️", "Action", "https://911games.io/car-parking-multiplayer"], ["Ragdoll", "🤸", "Action", "https://911games.io/ragdoll"], ["Zombs Royale", "🧟", "Action", "https://911games.io/zombs-royale"], ["Football Legends", "⚽", "Sports", "https://911games.io/football-legends-2"], ["A Small World Cup", "⚽", "Sports", "https://911games.io/a-small-world-cup"], ["Head Soccer", "⚽", "Sports", "https://911games.io/head-soccer"], ["Penalty Kick Online", "⚽", "Sports", "https://911games.io/penalty-kick-online"], ["Soccer Legends 2021", "⚽", "Sports", "https://911games.io/soccer-legends-2021"], ["Boxing Random", "🥊", "Sports", "https://911games.io/boxing-random"], ["Tennis Masters", "🎾", "Sports", "https://911games.io/tennis-masters"], ["Ping Pong", "🏓", "Sports", "https://911games.io/ping-pong"], ["Basket Champs", "🏀", "Sports", "https://911games.io/basket-champs"], ["4th and Goal 2022", "🏈", "Sports", "https://911games.io/4th-and-goal-2022"], ["Volleyball Challenge", "🏐", "Sports", "https://911games.io/volleyball-challenge"], ["LoLBeans", "🫘", "Adventure", "https://911games.io/lolbeans"], ["Terraria", "⛏️", "Adventure", "https://911games.io/terraria"], ["Forge Of Empires", "🏰", "Adventure", "https://911games.io/forge-of-empires"], ["Narrow One", "🎯", "Adventure", "https://911games.io/narrow-one"], ["Escape Room 2", "🚪", "Adventure", "https://911games.io/escape-room-2"], ["MooMoo", "🪓", "Adventure", "https://911games.io/moomoo"], ["Checkers", "⚫", "Board", "https://911games.io/checkers"], ["Yahtzee", "🎲", "Board", "https://911games.io/yahtzee"], ["Backgammon", "🎲", "Board", "https://911games.io/backgammon"], ["Uno", "🎴", "Board", "https://911games.io/uno"], ["Master Chess Multiplayer", "♟️", "Board", "https://911games.io/master-chess-multiplayer"], ["Papa's Freezeria", "🍦", "Simulation", "https://911games.io/papas-freezeria"], ["Papa's Burgeria", "🍔", "Simulation", "https://911games.io/papas-burgeria"], ["Papa's Cupcakeria", "🧁", "Simulation", "https://911games.io/papas-cupcakeria"], ["Papa's Scooperia", "🍨", "Simulation", "https://911games.io/papas-scooperia"], ["Virtual Piano", "🎹", "Music", "https://911games.io/virtual-piano"], ["Poly Art", "🎨", "Art", "https://911games.io/poly-art"], ["Paper 2", "📄", "Multiplayer", "https://911games.io/paper-2"]];
+const games = [["Slope", "⚪", "Arcade", "https://y8.com/embed/slope"], ["Flappy Bird", "🐥", "Arcade", "https://funhtml5games.com?embed=flappy", [800, 520]], ["Ragdoll Archers", "🏹", "Shooter", "https://www.miniplay.com/embed/ragdoll-archers"], ["Happy Wheels", "🤕", "Action", "https://www.silvergames.com/en/happy-wheels/iframe"], ["2048", "🔢", "Puzzle", "https://play2048.co/"]];
 
 
 let active = "ALL";
-
-let currentGame = null;
+let currentScaleHandler = null;
 
 
 /* ============================================================
@@ -1058,87 +1348,63 @@ let currentGame = null;
 function renderFilters() {
 
     const cats = [
-
         "ALL",
-
         ...new Set(
-            games.map(
-                g => g[2]
-            )
+            games.map(g => g[2])
         )
-
     ];
 
+    const f =
+        document.getElementById("filters");
 
-    const filters =
-        document.getElementById(
-            "filters"
-        );
+    f.innerHTML = cats.map(c => `
 
+        <button
+            class="filter ${c === active ? "active" : ""}"
+            onclick="setCategory('${c}')"
+        >
 
-    filters.innerHTML =
-        cats.map(
-            category => `
+            ${c}
 
-                <button
-                    class="filter ${
-                        category === active
-                        ? "active"
-                        : ""
-                    }"
+        </button>
 
-                    onclick="setCategory('${category}')"
-                >
-
-                    ${category}
-
-                </button>
-
-            `
-        ).join("");
-
+    `).join("");
 }
 
 
-function setCategory(category) {
+function setCategory(c) {
 
-    active = category;
+    active = c;
 
     renderFilters();
 
     render();
-
 }
 
 
 /* ============================================================
-   RENDER
+   RENDER GAMES
    ============================================================ */
 
 function render() {
 
-    const search =
+    const q =
         document
-            .getElementById("search")
-            .value
-            .toLowerCase();
-
+        .getElementById("search")
+        .value
+        .toLowerCase();
 
     const shown =
-        games.filter(
-            game =>
+        games.filter(g =>
 
-                (
-                    active === "ALL"
-                    ||
-                    game[2] === active
-                )
+            (active === "ALL" || g[2] === active)
 
-                &&
+            &&
 
-                game[0]
-                    .toLowerCase()
-                    .includes(search)
+            g[0]
+            .toLowerCase()
+            .includes(q)
+
         );
 
 
@@ -1160,174 +1426,50 @@ function render() {
         .getElementById("grid")
         .innerHTML =
 
-        shown.map(
+        shown.map(g => `
 
-            game => `
+            <article
+                class="card"
+                onclick='openGame(${JSON.stringify(g)})'
+            >
 
-                <article
-                    class="card"
-                    onclick='openGame(${JSON.stringify(game)})'
+                <div
+                    class="card-fullscreen"
+                    onclick='event.stopPropagation(); openGameFullscreen(${JSON.stringify(g)})'
+                    title="Open Fullscreen"
                 >
-
-                    <div class="thumb">
-
-                        ${game[1]}
-
-                    </div>
-
-
-                    <div class="info">
-
-                        <div class="title">
-
-                            ${game[0]}
-
-                        </div>
-
-
-                        <div class="meta">
-
-                            <span class="tag">
-
-                                ${game[2]}
-
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-            `
-
-        ).join("");
-
-}
-
-
-/* ============================================================
-   LOAD GAME
-   ============================================================ */
-
-function loadCurrentGame() {
-
-    if (!currentGame) {
-
-        return;
-
-    }
-
-
-    const gamearea =
-        document.getElementById(
-            "gamearea"
-        );
-
-
-    const url =
-        currentGame[3];
-
-
-    if (!url) {
-
-        gamearea.innerHTML = `
-
-            <div class="play-screen">
-
-                <div class="play-icon">
-                    🚧
+                    ⛶
                 </div>
 
-                <h2>
-                    Game Unavailable
-                </h2>
+                <div class="thumb">
 
-                <p>
-                    No playable frame was found.
-                </p>
+                    ${g[1]}
 
-            </div>
+                </div>
 
-        `;
+                <div class="info">
 
-        return;
+                    <div class="title">
 
-    }
+                        ${g[0]}
 
+                    </div>
 
-    gamearea.innerHTML = "";
+                    <div class="meta">
 
+                        <span class="tag">
 
-    const iframe =
-        document.createElement(
-            "iframe"
-        );
+                            ${g[2]}
 
+                        </span>
 
-    iframe.src = url;
+                    </div>
 
+                </div>
 
-    iframe.title =
-        currentGame[0];
+            </article>
 
-
-    iframe.setAttribute(
-        "allow",
-        "fullscreen; autoplay; gamepad; clipboard-read; clipboard-write"
-    );
-
-
-    iframe.setAttribute(
-        "allowfullscreen",
-        ""
-    );
-
-
-    iframe.setAttribute(
-        "webkitallowfullscreen",
-        ""
-    );
-
-
-    iframe.setAttribute(
-        "mozallowfullscreen",
-        ""
-    );
-
-
-    iframe.style.position =
-        "absolute";
-
-
-    iframe.style.inset =
-        "0";
-
-
-    iframe.style.width =
-        "100%";
-
-
-    iframe.style.height =
-        "100%";
-
-
-    iframe.style.border =
-        "none";
-
-
-    iframe.style.display =
-        "block";
-
-
-    iframe.style.background =
-        "#000";
-
-
-    gamearea.appendChild(
-        iframe
-    );
-
+        `).join("");
 }
 
 
@@ -1335,22 +1477,182 @@ function loadCurrentGame() {
    OPEN GAME
    ============================================================ */
 
-function openGame(game) {
+function openGame(g, skipFullscreen) {
 
-    currentGame = game;
+    if (currentScaleHandler) {
+        window.removeEventListener("resize", currentScaleHandler);
+        currentScaleHandler = null;
+    }
+
+    document
+        .body
+        .classList
+        .add("game-open");
 
 
-    document.body.classList.add(
-        "game-open"
-    );
+    document
+        .getElementById("modalTitle")
+        .textContent =
+        g[0].toUpperCase();
+
+
+    const modalIcon =
+        document.getElementById("modalIcon");
+
+    if (modalIcon) {
+        modalIcon.textContent = g[1];
+    }
+
+
+    const gamearea =
+        document.getElementById("gamearea");
+
+
+    /*
+       IMPORTANT:
+
+       The website URL goes directly into the iframe.
+
+       Your arcade controls the container,
+       while the external website controls
+       what appears inside the iframe.
+    */
+
+    if (g[3] && g[3] !== "#") {
+
+        const nativeSize = g[4];
+
+        const fixedClass =
+            nativeSize
+            ? 'class="fixed-size"'
+            : '';
+
+        gamearea.innerHTML = `
+
+            <iframe
+
+                ${fixedClass}
+
+                src="${g[3]}"
+
+                title="${g[0]}"
+
+                allow="
+                    fullscreen;
+                    autoplay;
+                    gamepad;
+                    clipboard-read;
+                    clipboard-write
+                "
+
+                allowfullscreen
+
+                webkitallowfullscreen
+
+                mozallowfullscreen
+
+            ></iframe>
+
+        `;
+
+        /*
+           If this game has a fixed native
+           size, scale the iframe up (or down)
+           with a CSS transform so it fills
+           the game window instead of sitting
+           pinned at its native pixel size.
+        */
+
+        if (nativeSize) {
+
+            const applyScale = () => {
+
+                const frame =
+                    gamearea.querySelector("iframe");
+
+                if (!frame) return;
+
+                const [nw, nh] = nativeSize;
+
+                const availW = gamearea.clientWidth;
+                const availH = gamearea.clientHeight;
+
+                const scaleX = availW / nw;
+                const scaleY = availH / nh;
+
+                frame.style.setProperty("--native-w", nw + "px");
+                frame.style.setProperty("--native-h", nh + "px");
+                frame.style.setProperty("--scale-x", scaleX);
+                frame.style.setProperty("--scale-y", scaleY);
+
+            };
+
+            applyScale();
+
+            currentScaleHandler = applyScale;
+
+            window.addEventListener("resize", applyScale);
+
+        }
+
+    }
+
+    else {
+
+        gamearea.innerHTML = `
+
+            <div class="demo">
+
+                <div class="big">
+                    ${g[1]}
+                </div>
+
+                <h2>
+                    ${g[0]}
+                </h2>
+
+                <p>
+                    ${g[2]}.
+                    Add the game's URL to make it playable.
+                </p>
+
+            </div>
+
+        `;
+
+    }
 
 
     document
         .getElementById("modal")
-        .classList.add("show");
+        .classList
+        .add("show");
 
 
-    loadCurrentGame();
+    /*
+       By default, every game takes over the
+       entire screen immediately -- no modal
+       chrome, no header, no footer, just the
+       game. Press Escape (or the hidden exit
+       button) to get back to the directory.
+    */
+
+    if (!skipFullscreen) {
+
+        setTimeout(
+            () => {
+
+                if (!document.fullscreenElement) {
+
+                    toggleTrueFullscreen();
+
+                }
+
+            },
+            150
+        );
+
+    }
 
 }
 
@@ -1359,38 +1661,38 @@ function openGame(game) {
    CLOSE GAME
    ============================================================ */
 
-function closeGameSession() {
+function closeGame() {
 
-    if (document.fullscreenElement) {
-
-        document
-            .exitFullscreen()
-            .catch(
-                () => {}
-            );
-
+    if (currentScaleHandler) {
+        window.removeEventListener("resize", currentScaleHandler);
+        currentScaleHandler = null;
     }
 
-
-    document.body.classList.remove(
-        "game-open"
-    );
+    document
+        .body
+        .classList
+        .remove("game-open");
 
 
     document
         .getElementById("modal")
-        .classList.remove(
-            "show"
-        );
+        .classList
+        .remove("show");
+
+
+    document
+        .getElementById("modal")
+        .classList
+        .remove("fullscreen");
 
 
     document
         .getElementById("gamearea")
         .innerHTML = `
 
-            <div class="play-screen">
+            <div class="demo">
 
-                <div class="play-icon">
+                <div class="big">
                     🎮
                 </div>
 
@@ -1399,7 +1701,7 @@ function closeGameSession() {
                 </h2>
 
                 <p>
-                    Select a game to begin.
+                    Select another game.
                 </p>
 
             </div>
@@ -1407,45 +1709,69 @@ function closeGameSession() {
         `;
 
 
-    currentGame = null;
+    document
+        .getElementById("fsBtn")
+        .textContent =
+        "⛶ FULLSCREEN";
+
+
+    if (document.fullscreenElement) {
+
+        document.exitFullscreen();
+
+    }
 
 }
 
 
 /* ============================================================
-   FULLSCREEN
+   TRUE FULLSCREEN
    ============================================================ */
 
-async function toggleFullscreen() {
+function toggleTrueFullscreen() {
 
     const gamebox =
-        document.querySelector(
-            ".gamebox"
-        );
+        document.querySelector(".gamebox");
+
+    const modal =
+        document.getElementById("modal");
 
 
-    try {
+    if (!document.fullscreenElement) {
 
-        if (!document.fullscreenElement) {
+        gamebox
+            .requestFullscreen()
+            .catch(
+                e =>
+                console.log(
+                    "Fullscreen error:",
+                    e
+                )
+            );
 
-            await gamebox.requestFullscreen();
+        modal
+            .classList
+            .add("fullscreen");
 
-        }
-
-        else {
-
-            await document.exitFullscreen();
-
-        }
+        document
+            .getElementById("fsBtn")
+            .textContent =
+            "⛶ EXIT FULLSCREEN";
 
     }
 
-    catch (error) {
+    else {
 
-        console.log(
-            "Fullscreen unavailable:",
-            error
-        );
+        document.exitFullscreen();
+
+        modal
+            .classList
+            .remove("fullscreen");
+
+        document
+            .getElementById("fsBtn")
+            .textContent =
+            "⛶ FULLSCREEN";
 
     }
 
@@ -1453,95 +1779,267 @@ async function toggleFullscreen() {
 
 
 /* ============================================================
-   FULLSCREEN ICON
+   OPEN GAME FULLSCREEN
    ============================================================ */
 
-document.addEventListener(
-    "fullscreenchange",
-    () => {
+function openGameFullscreen(g) {
 
-        const button =
-            document.getElementById(
-                "fullscreenBtn"
-            );
+    /*
+       Every game already goes fullscreen by
+       default now, so this is just an alias
+       kept for the card's fullscreen icon.
+    */
 
+    openGame(g);
 
-        if (!button) {
-
-            return;
-
-        }
-
-
-        button.textContent =
-            document.fullscreenElement
-            ? "⛝"
-            : "⛶";
-
-    }
-);
+}
 
 
 /* ============================================================
-   ESCAPE
+   AI PICK PANEL
+
+   Self-contained recommender: no external API, no key, so it
+   works exactly the same whether this file is opened locally
+   or deployed anywhere, including GitHub Pages. It just scores
+   the games already in the catalog against whatever mood or
+   genre words you type in.
    ============================================================ */
 
-document.addEventListener(
-    "keydown",
-    event => {
+const AI_MOOD_MAP = {
 
-        if (event.key !== "Escape") {
+    "fast":         ["Racing", "Arcade"],
+    "speed":        ["Racing", "Arcade"],
+    "competitive":  ["Shooter", "Sports", "Racing"],
+    "relax":        ["Puzzle"],
+    "relaxing":     ["Puzzle"],
+    "calm":         ["Puzzle"],
+    "chill":        ["Puzzle"],
+    "puzzle":       ["Puzzle"],
+    "brain":        ["Puzzle"],
+    "think":        ["Puzzle"],
+    "shoot":        ["Shooter"],
+    "shooting":     ["Shooter"],
+    "gun":          ["Shooter"],
+    "combat":       ["Shooter", "Action"],
+    "sport":        ["Sports"],
+    "sports":       ["Sports"],
+    "ball":         ["Sports"],
+    "drive":        ["Racing"],
+    "driving":      ["Racing"],
+    "car":          ["Racing"],
+    "race":         ["Racing"],
+    "silly":        ["Action", "Arcade"],
+    "funny":        ["Action", "Arcade"],
+    "physics":      ["Action"],
+    "ragdoll":      ["Shooter", "Action"],
+    "quick":        ["Arcade"],
+    "short":        ["Arcade", "Puzzle"],
+    "classic":      ["Puzzle", "Arcade"],
+    "numbers":      ["Puzzle"],
 
-            return;
+};
+
+
+function scoreGameForQuery(game, queryWords) {
+
+    const [name, icon, category] = game;
+
+    let score = 0;
+
+    const nameLower = name.toLowerCase();
+
+
+    for (const word of queryWords) {
+
+        if (nameLower.includes(word)) {
+
+            score += 3;
 
         }
 
 
-        if (document.fullscreenElement) {
+        const moodCategories = AI_MOOD_MAP[word];
 
-            document
-                .exitFullscreen()
-                .catch(
-                    () => {}
-                );
+        if (moodCategories && moodCategories.includes(category)) {
 
-            return;
-
-        }
-
-
-        if (currentGame) {
-
-            closeGameSession();
+            score += 2;
 
         }
 
     }
-);
+
+    return score;
+
+}
 
 
-/* ============================================================
-   RANDOM
-   ============================================================ */
+function toggleAiPanel() {
 
-function randomGame() {
+    const panel =
+        document.getElementById("aiPanel");
 
-    if (!games.length) {
+    const backdrop =
+        document.getElementById("aiBackdrop");
+
+    const opening =
+        !panel.classList.contains("show");
+
+    panel.classList.toggle("show");
+
+    backdrop.classList.toggle("show");
+
+
+    if (opening) {
+
+        setTimeout(
+
+            () => document
+                .getElementById("aiInput")
+                ?.focus(),
+
+            300
+
+        );
+
+    }
+
+}
+
+
+function renderAiSuggestions(matches) {
+
+    const results =
+        document.getElementById("aiResults");
+
+
+    if (!matches.length) {
+
+        results.innerHTML = `
+
+            <div class="ai-empty">
+                Nothing matched that in the current
+                directory — try a genre name like
+                "racing", "puzzle" or "shooter", or
+                just hit RANDOM up top.
+            </div>
+
+        `;
 
         return;
 
     }
 
 
+    results.innerHTML =
+
+        matches.map(
+
+            ({ game, why }) => `
+
+                <div
+                    class="ai-suggestion"
+                    onclick='toggleAiPanel(); openGame(${JSON.stringify(game)})'
+                >
+
+                    <div class="icon">
+                        ${game[1]}
+                    </div>
+
+                    <div>
+
+                        <div class="title">
+                            ${game[0]}
+                        </div>
+
+                        <div class="why">
+                            ${why}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `
+
+        ).join("");
+
+}
+
+
+function runAiPick() {
+
+    const raw =
+        document
+            .getElementById("aiInput")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    if (!raw) {
+
+        renderAiSuggestions([]);
+
+        return;
+
+    }
+
+
+    const queryWords =
+        raw
+            .split(/\s+/)
+            .filter(Boolean);
+
+
+    const scored =
+        games
+
+            .map(game => ({
+
+                game,
+
+                score: scoreGameForQuery(
+                    game,
+                    queryWords
+                )
+
+            }))
+
+            .filter(entry => entry.score > 0)
+
+            .sort(
+                (a, b) => b.score - a.score
+            )
+
+            .slice(0, 3)
+
+            .map(entry => ({
+
+                game: entry.game,
+
+                why: `Matches "${raw}" — ${entry.game[2]}`
+
+            }));
+
+
+    renderAiSuggestions(scored);
+
+}
+
+
+/* ============================================================
+   RANDOM GAME
+   ============================================================ */
+
+function randomGame() {
+
     const game =
         games[
             Math.floor(
                 Math.random()
-                *
-                games.length
+                * games.length
             )
         ];
-
 
     openGame(game);
 
@@ -1561,13 +2059,71 @@ document
 
 
 /* ============================================================
+   KEYBOARD
+   ============================================================ */
+
+document.addEventListener(
+    "keydown",
+    e => {
+
+        if (e.key === "Escape") {
+
+            if (document.fullscreenElement) {
+
+                document.exitFullscreen();
+
+            }
+
+            else if (
+                document
+                .getElementById("modal")
+                .classList
+                .contains("show")
+            ) {
+
+                closeGame();
+
+            }
+
+        }
+
+    }
+);
+
+
+/* ============================================================
+   FULLSCREEN CHANGE
+   ============================================================ */
+
+document.addEventListener(
+    "fullscreenchange",
+    () => {
+
+        if (!document.fullscreenElement) {
+
+            document
+                .getElementById("modal")
+                .classList
+                .remove("fullscreen");
+
+            document
+                .getElementById("fsBtn")
+                .textContent =
+                "⛶ FULLSCREEN";
+
+        }
+
+    }
+);
+
+
+/* ============================================================
    START
    ============================================================ */
 
 renderFilters();
 
 render();
-
 
 </script>
 
